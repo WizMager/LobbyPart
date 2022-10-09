@@ -50,15 +50,27 @@ public class LoginLobby : MonoBehaviour
                 switch (message.Tag)
                 {
                      case   Tags.PlayerLoginSuccessTag:
-                             CheckSuccessLoginHandler(message);
+                             CheckSuccessLoginHandler(e);
                              break;
                 }
         }
 
-        private void CheckSuccessLoginHandler(Message message)
+        private void CheckSuccessLoginHandler(MessageReceivedEventArgs e)
         {
+                using var message = e.GetMessage();
                 using var reader = message.GetReader();
                 var loginResult = reader.ReadBoolean();
+                // if (loginResult)
+                // {
+                //         Debug.Log("Need load scene");
+                //         SceneManager.LoadScene(1);    
+                // }
+                // else
+                // {
+                //         loginButton.interactable = true;
+                //         nicknameInputField.interactable = true;
+                //         nicknameInputField.text = "Login is not success!";
+                // }
                 _nicknameCheckResult = loginResult;
                 _receiveCheckNickname = true;
         }

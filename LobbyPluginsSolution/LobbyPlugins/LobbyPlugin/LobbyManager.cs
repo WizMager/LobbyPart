@@ -10,6 +10,7 @@ namespace LobbyPlugin
         public override Version Version => new Version(1, 0, 0);
         public override bool ThreadSafe => false;
         private readonly Dictionary<ushort, IClient> _clients = new Dictionary<ushort, IClient>();
+        private readonly Dictionary<ushort, string> _playerNicknames = new Dictionary<ushort, string>();
 
         public LobbyManager(PluginLoadData pluginLoadData) : base(pluginLoadData)
         {
@@ -49,6 +50,7 @@ namespace LobbyPlugin
                     if (nickname.Length >= 3 && nickname.Length <= 12)
                     {
                         isSuccess = true;
+                        _playerNicknames.Add(client.ID, nickname);
                     }
                     else
                     {
@@ -69,7 +71,8 @@ namespace LobbyPlugin
         private void ClientDisconnectedHandler(object sender, ClientDisconnectedEventArgs e)
         {
             var client = e.Client;
-            _clients.Remove(e.Client.ID);
+            _clients.Remove(client.ID);
+            _playerNicknames.Remove(client.ID);
             client.MessageReceived -= MessageReceivedHandler;
         }
     }
